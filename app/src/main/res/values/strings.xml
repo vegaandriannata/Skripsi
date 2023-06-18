@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">loginRegister_mysql_volley</string>
+    <string name="title_activity_dashboard">Dashboard</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_account">Account</string>
+    <string name="laki">laki-laki</string>
+    <string name="perem">perempuan</string>
+    <string-array name="category_array">
+        <item>All</item>
+        <item>Table</item>
+        <item>Chair</item>
+        <!-- Add more categories as needed -->
+    </string-array>
+</resources>
