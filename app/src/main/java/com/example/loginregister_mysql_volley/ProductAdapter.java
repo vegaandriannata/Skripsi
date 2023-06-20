@@ -1,60 +1,86 @@
-package com.example.loginregister_mysql_volley;
+    package com.example.loginregister_mysql_volley;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+    import android.view.LayoutInflater;
+    import android.view.View;
+    import android.view.ViewGroup;
+    import android.widget.ImageView;
+    import android.widget.TextView;
+    import java.io.ByteArrayOutputStream;
+    import android.graphics.Bitmap;
+    import android.graphics.BitmapFactory;
+    import androidx.annotation.NonNull;
+    import androidx.recyclerview.widget.RecyclerView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+    import android.content.Context;
+    import android.content.Intent;
 
-import java.util.List;
+    import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
-    private List<Product> productList;
+    public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+        private List<Product> productList;
+        private Context context;
 
-    public ProductAdapter(List<Product> productList) {
-        this.productList = productList;
-    }
+        public ProductAdapter(List<Product> productList) {
+            this.productList = productList;
+        }
 
-    @NonNull
-    @Override
-    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_product, parent, false);
-        return new ProductViewHolder(view);
-    }
+        @NonNull
+        @Override
+        public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            context = parent.getContext();
+            View view = LayoutInflater.from(context).inflate(R.layout.item_product, parent, false);
+            return new ProductViewHolder(view);
+        }
 
-    @Override
-    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product product = productList.get(position);
-        holder.productImage.setImageResource(product.getImage());
-        holder.productName.setText(product.getName());
-        holder.productPrice.setText(product.getPrice());
-    }
+        @Override
+        public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
+            final Product product = productList.get(position);
 
-    @Override
-    public int getItemCount() {
-        return productList.size();
-    }
+            // Set the image bitmap to the ImageView
+            holder.productImage.setImageBitmap(product.getImage());
 
-    public static class ProductViewHolder extends RecyclerView.ViewHolder {
-        private ImageView productImage;
-        private TextView productName;
-        private TextView productPrice;
-        private ImageView addToCartButton;
-        private ImageView addToWishlist;
+            // Set the other views as needed
+            holder.productName.setText(product.getName());
+            holder.productPrice.setText(product.getPrice());
 
+            // Set a click listener on the item view
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Create an intent to launch ProductDetailActivity
+                    Intent intent = new Intent(context, ProductDetailActivity.class);
 
-        public ProductViewHolder(@NonNull View itemView) {
-            super(itemView);
-            productImage = itemView.findViewById(R.id.product_image);
-            productName = itemView.findViewById(R.id.product_name);
-            productPrice = itemView.findViewById(R.id.product_price);
-            addToCartButton = itemView.findViewById(R.id.add_to_cart_button);
-            addToWishlist = itemView.findViewById(R.id.add_to_wishlist);
+                    // Convert the image Bitmap to byte array
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    product.getImage().compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
+                    // Set the byte array to the Product object
+                    product.setImageBytes(byteArray);
+
+                    // Pass the Product object through the intent
+                    intent.putExtra("product", product);
+                    context.startActivity(intent);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return productList.size();
+        }
+
+        public class ProductViewHolder extends RecyclerView.ViewHolder {
+            private ImageView productImage;
+            private TextView productName;
+            private TextView productPrice;
+
+            public ProductViewHolder(@NonNull View itemView) {
+                super(itemView);
+                productImage = itemView.findViewById(R.id.product_image);
+                productName = itemView.findViewById(R.id.product_name);
+                productPrice = itemView.findViewById(R.id.product_price);
+            }
         }
     }
-}
+

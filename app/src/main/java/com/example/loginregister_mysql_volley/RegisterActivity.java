@@ -107,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             };
 
-            VolleyConnection.getInstance(RegisterActivity.this).addToRequestQue(stringRequest);
+            VolleyConnection.getInstance(RegisterActivity.this).addToRequestQueue(stringRequest);
 
             new Handler().postDelayed(new Runnable() {
                 @Override

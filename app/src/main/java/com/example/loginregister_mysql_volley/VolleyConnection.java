@@ -12,7 +12,7 @@ public class VolleyConnection {
     private RequestQueue requestQueue;
     private static Context vCtx;
 
-    private VolleyConnection (Context context) {
+    private VolleyConnection(Context context) {
         vCtx = context;
         requestQueue = getRequestQueue();
     }
@@ -31,7 +31,11 @@ public class VolleyConnection {
         return vInstance;
     }
 
-    public<T> void addToRequestQue (Request<T> request) {
+    public <T> void addToRequestQueue(Request<T> request) {
         getRequestQueue().add(request);
+    }
+
+    public RequestQueue getRequestQueueInstance() {
+        return getRequestQueue();
     }
 }

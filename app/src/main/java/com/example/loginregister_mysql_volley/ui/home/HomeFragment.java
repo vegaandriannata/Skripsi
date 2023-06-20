@@ -28,6 +28,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.util.Base64;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -74,7 +77,15 @@ public class HomeFragment extends Fragment {
                                 JSONObject productObject = jsonArray.getJSONObject(i);
                                 String name = productObject.getString("nama_brg");
                                 String price = productObject.getString("harga_brg");
-                                productList.add(new Product(R.drawable.product_image_1, name, price));
+                                String imageString = productObject.getString("gambar");
+
+                                // Convert the image string to byte array
+                                byte[] imageBytes = Base64.decode(imageString, Base64.DEFAULT);
+
+                                // Convert the byte array to Bitmap
+                                Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+
+                                productList.add(new Product(imageBitmap, name, price));
                             }
                             productAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
@@ -89,6 +100,7 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-        VolleyConnection.getInstance(requireContext()).addToRequestQue(jsonObjectRequest);
+        VolleyConnection.getInstance(requireContext()).addToRequestQueue(jsonObjectRequest);
     }
+
 }

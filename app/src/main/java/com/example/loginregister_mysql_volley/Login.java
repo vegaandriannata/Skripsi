@@ -2,13 +2,8 @@ package com.example.loginregister_mysql_volley;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkCapabilities;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +25,7 @@ public class Login extends AppCompatActivity {
 
     EditText username, password;
     Button login, register;
-    ProgressDialog progressDialog;
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +36,12 @@ public class Login extends AppCompatActivity {
         password = findViewById(R.id.edt_passwordLogin);
         login = findViewById(R.id.btn_loginLogin);
         register = findViewById(R.id.btn_registerLogin);
-        progressDialog = new ProgressDialog(Login.this);
+        sessionManager = new SessionManager(getApplicationContext());
+
+        // Check if user is already logged in
+        if (sessionManager.isLoggedIn()) {
+            proceedToDashboard();
+        }
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,57 +63,50 @@ public class Login extends AppCompatActivity {
     }
 
     public void checkLogin(final String username, final String password) {
-        if (checkNetworkConnection()) {
-            progressDialog.show();
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_LOGIN_URL,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
-                                String resp = jsonObject.getString("server_response");
-                                if (resp.equals("[{\"status\":\"OK\"}]")) {
-                                    Toast.makeText(getApplicationContext(), "Login Berhasil", Toast.LENGTH_SHORT).show();
-                                    Intent dashboardIntent = new Intent(Login.this, Dashboard.class);
-                                    startActivity(dashboardIntent);
-                                } else {
-                                    Toast.makeText(getApplicationContext(), resp, Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+        // ...
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_LOGIN_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String resp = jsonObject.getString("server_response");
+                            if (resp.equals("[{\"status\":\"OK\"}]")) {
+                                Toast.makeText(getApplicationContext(), "Login Berhasil", Toast.LENGTH_SHORT).show();
+
+                                // Save login information to session manager
+                                sessionManager.setLoggedIn(username);
+
+                                proceedToDashboard();
+                            } else {
+                                Toast.makeText(getApplicationContext(), resp, Toast.LENGTH_SHORT).show();
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("password", password);
+                return params;
+            }
+        };
 
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("username", username);
-                    params.put("password", password);
-                    return params;
-                }
-            };
-
-            VolleyConnection.getInstance(Login.this).addToRequestQue(stringRequest);
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    progressDialog.cancel();
-                }
-            }, 2000);
-        } else {
-            Toast.makeText(getApplicationContext(), "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
-        }
+        VolleyConnection.getInstance(Login.this).addToRequestQueue(stringRequest);
     }
 
-    public boolean checkNetworkConnection() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
-        return (networkCapabilities != null && networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
+    private void proceedToDashboard() {
+        Intent dashboardIntent = new Intent(Login.this, Dashboard.class);
+        startActivity(dashboardIntent);
+        finish();
     }
 }
