@@ -63,7 +63,8 @@
         <activity android:name=".Login" />
         <activity
             android:name=".WelcomeActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

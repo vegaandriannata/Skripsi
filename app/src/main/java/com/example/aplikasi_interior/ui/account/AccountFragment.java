@@ -43,7 +43,7 @@ public class AccountFragment extends Fragment {
         usernameTextView = view.findViewById(R.id.text_username);
         emailTextView = view.findViewById(R.id.text_email);
         sessionManager = new SessionManager(requireContext());
-
+        userIdTextView.setVisibility(View.GONE);
         return view;
     }
 
@@ -75,6 +75,8 @@ public class AccountFragment extends Fragment {
                             userIdTextView.setText(userId);
                             usernameTextView.setText(username);
                             emailTextView.setText(email);
+
+                            sessionManager.setUserId(userId);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

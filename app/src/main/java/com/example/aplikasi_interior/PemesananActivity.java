@@ -82,22 +82,32 @@ public class PemesananActivity extends AppCompatActivity {
                 Intent intent = new Intent(PemesananActivity.this, KonfirmasiPesananActivity.class);
                 intent.putExtra("selectedProducts", new ArrayList<>(selectedProducts)); // Mengonversi ke ArrayList
                 intent.putExtra("address", address);
+
+                // Menyimpan nilai total order ke dalam Intent
+                double totalOrder = calculateTotalOrder();
+                String formattedTotal = formatPrice(totalOrder);
+                intent.putExtra("totalOrder", formattedTotal);
+
                 startActivity(intent);
             }
         });
     }
 
     private void updateTotalOrder() {
+        double total = calculateTotalOrder();
+        String formattedTotal = formatPrice(total);
+        String totalOrderText = "Total Order: " + formattedTotal;
+        totalOrderTextView.setText(totalOrderText);
+    }
+
+    private double calculateTotalOrder() {
         double total = 0;
         for (Product product : selectedProducts) {
             double price = Double.parseDouble(product.getPrice().replace("Rp", "").replace(",", ""));
             int quantity = product.getQuantity();
             total += price * quantity;
         }
-
-        String formattedTotal = formatPrice(total);
-        String totalOrderText = "Total Order: " + formattedTotal;
-        totalOrderTextView.setText(totalOrderText);
+        return total;
     }
 
     private String formatPrice(double price) {

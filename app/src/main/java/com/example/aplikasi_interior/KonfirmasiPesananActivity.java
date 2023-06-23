@@ -1,14 +1,31 @@
 package com.example.aplikasi_interior;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
 public class KonfirmasiPesananActivity extends AppCompatActivity {
     private TextView idBarangTextView;
     private TextView userIdTextView;
@@ -17,6 +34,9 @@ public class KonfirmasiPesananActivity extends AppCompatActivity {
     private TextView alamatTextView;
     private TextView qtyTextView;
     private TextView hargaTextView;
+
+    private Button confirmButton;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +50,13 @@ public class KonfirmasiPesananActivity extends AppCompatActivity {
         alamatTextView = findViewById(R.id.alamat);
         qtyTextView = findViewById(R.id.qty);
         hargaTextView = findViewById(R.id.harga);
+
+        //menghilangkan tampilan id_brg dan user_id
+        idBarangTextView.setVisibility(View.GONE);
+        userIdTextView.setVisibility(View.GONE);
+
+        confirmButton = findViewById(R.id.confirm_button);
+        progressDialog = new ProgressDialog(this);
 
         // Retrieve the selected products and address from the intent
         Bundle extras = getIntent().getExtras();
@@ -54,11 +81,75 @@ public class KonfirmasiPesananActivity extends AppCompatActivity {
                 String orderDate = dateFormat.format(calendar.getTime());
                 orderDateTextView.setText("Order Date: " + orderDate);
 
-                totalOrderTextView.setText("Total Order: " + totalOrder); // Menggunakan total order yang diambil dari PemesananActivity
+                totalOrderTextView.setText("Total Order: " + totalOrder.replace("Rp", "").replace(",", "")); // Menggunakan total order yang diambil dari PemesananActivity
                 alamatTextView.setText("Alamat: " + address);
                 qtyTextView.setText("Quantity: " + product.getQuantity());
                 hargaTextView.setText("Harga: " + product.getPrice());
             }
         }
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveOrderToServer();
+            }
+        });
+    }
+
+    private void saveOrderToServer() {
+        progressDialog.setMessage("Saving order...");
+        progressDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_POST_ORDER,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String status = jsonObject.getJSONArray("server_response")
+                                    .getJSONObject(0)
+                                    .getString("status");
+
+                            if (status.equals("OK")) {
+                                Toast.makeText(getApplicationContext(), "Order saved successfully", Toast.LENGTH_SHORT).show();
+                                // Redirect to success page or perform any desired action
+                                Intent intent = new Intent(KonfirmasiPesananActivity.this, PesananBerhasilActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Failed to save order", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Failed to save order", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Failed to save order", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                // Prepare the parameters to be sent in the request
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", userIdTextView.getText().toString().split(":")[1].trim());
+                params.put("order_date", orderDateTextView.getText().toString().split(":")[1].trim());
+                params.put("total_order", totalOrderTextView.getText().toString().split(":")[1].trim().replace("Rp", "").replace(",", ""));
+                params.put("alamat", alamatTextView.getText().toString().split(":")[1].trim());
+                params.put("id_brg", idBarangTextView.getText().toString().split(":")[1].trim());
+                params.put("qty", qtyTextView.getText().toString().split(":")[1].trim());
+                params.put("harga", hargaTextView.getText().toString().split(":")[1].trim().replace("Rp", "").replace(",", ""));
+
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue
+        VolleyConnection.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

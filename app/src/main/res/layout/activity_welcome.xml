@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/txtwelcome"
-        android:text="Welcome"
+        android:text=""
         android:textSize="50sp"
         android:textColor="#fff"
         android:layout_centerHorizontal="true"
@@ -30,7 +30,7 @@
         android:id="@+id/wLogin"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="80dp"
         android:layout_below="@+id/wImg"
         android:textColor="#fff"
         android:layout_centerHorizontal="true"

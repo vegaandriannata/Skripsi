@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 
 public class SessionManager {
     private static final String PREF_NAME = "MyAppPref";
-
     private static final String KEY_USERNAME = "username";
     private static final String KEY_EMAIL = "email";
     public static final String KEY_LOGGED_IN = "logged_in";
@@ -55,7 +54,11 @@ public class SessionManager {
         userDetails.put(KEY_USER_ID, sharedPreferences.getString(KEY_USER_ID, ""));
         return userDetails;
     }
-
+    public void setUserId(String userId) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_USER_ID, userId);
+        editor.apply();
+    }
     public void clearSession() {
         editor.remove(KEY_USERNAME);
         editor.remove(KEY_EMAIL);
