@@ -5,31 +5,32 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Product image -->
+    <!-- Interior image -->
     <ImageView
-        android:id="@+id/product_image"
+        android:id="@+id/interior_image"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/sample_furniture" />
+        android:src="@drawable/sample_interior" />
 
-    <!-- Product name -->
+    <!-- Interior name -->
     <TextView
-        android:id="@+id/product_name"
+        android:id="@+id/interior_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="8dp"
-        android:text="Product Name" />
+        android:text="Interior Name" />
 
-    <!-- Product price -->
+    <!-- Interior price -->
     <TextView
-        android:id="@+id/product_price"
+        android:id="@+id/interior_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:layout_marginTop="8dp"
-        android:text="Product Price" />
+        android:text="Interior Price" />
+
 
 </LinearLayout>

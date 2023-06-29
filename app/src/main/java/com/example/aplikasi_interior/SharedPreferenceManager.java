@@ -11,7 +11,7 @@ public class SharedPreferenceManager {
     private static final String PREF_NAME = "LoginPrefs";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_PASSWORD = "password";
-    private static final String KEY_USER_ID = "user_id"; // New field for user_id
+    private static final String KEY_USER_ID = "user_id";
 
     private final SharedPreferences sharedPreferences;
 
@@ -36,14 +36,14 @@ public class SharedPreferenceManager {
     }
 
     public String getUserId() {
-        return sharedPreferences.getString(KEY_USER_ID, null); // Retrieve user_id from SharedPreferences
+        return sharedPreferences.getString(KEY_USER_ID, null);
     }
 
     public void clearLoginCredentials() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(KEY_USERNAME);
         editor.remove(KEY_PASSWORD);
-        editor.remove(KEY_USER_ID); // Remove user_id from SharedPreferences
+        editor.remove(KEY_USER_ID);
         editor.apply();
     }
 }

@@ -16,6 +16,8 @@ import com.example.aplikasi_interior.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.aplikasi_interior.Interior;
+import com.example.aplikasi_interior.InteriorAdapter;
 import com.example.aplikasi_interior.Product;
 import com.example.aplikasi_interior.ProductAdapter;
 import com.example.aplikasi_interior.DbContract;
@@ -31,11 +33,15 @@ import org.json.JSONObject;
 import android.util.Base64;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+import android.widget.TextView;
 
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProductAdapter productAdapter;
+    private InteriorAdapter interiorAdapter;
     private List<Product> productList;
+    private List<Interior> interiorList;
+    private boolean isInteriorMenuClicked = false;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -51,20 +57,46 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Create a list of products
+        // Create a list of products and interiors
         productList = new ArrayList<>();
-
-        // Fetch data from the database
-        fetchDataFromDatabase();
+        interiorList = new ArrayList<>();
 
         // Set up the RecyclerView
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+
+        // Set the initial adapter to product adapter
         productAdapter = new ProductAdapter(productList);
+        interiorAdapter = new InteriorAdapter(interiorList);
         recyclerView.setAdapter(productAdapter);
+
+        // Set click listeners on menu items
+        TextView furnitureMenu = view.findViewById(R.id.menu_furniture);
+        TextView interiorMenu = view.findViewById(R.id.menu_interior);
+
+        furnitureMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isInteriorMenuClicked = false;
+                recyclerView.setAdapter(productAdapter);
+                fetchProductDataFromDatabase();
+            }
+        });
+
+        interiorMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isInteriorMenuClicked = true;
+                recyclerView.setAdapter(interiorAdapter);
+                fetchInteriorDataFromDatabase();
+            }
+        });
+
+        // Fetch initial data from the database
+        fetchProductDataFromDatabase();
     }
 
-    private void fetchDataFromDatabase() {
+    private void fetchProductDataFromDatabase() {
         String url = DbContract.SERVER_GET_PRODUCT;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -73,6 +105,7 @@ public class HomeFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray jsonArray = response.getJSONArray("server_response");
+                            productList.clear();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject productObject = jsonArray.getJSONObject(i);
                                 String name = productObject.getString("nama_brg");
@@ -106,4 +139,46 @@ public class HomeFragment extends Fragment {
         VolleyConnection.getInstance(requireContext()).addToRequestQueue(jsonObjectRequest);
     }
 
+    private void fetchInteriorDataFromDatabase() {
+        String url = DbContract.SERVER_GET_INTERIOR;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("server_response");
+                            interiorList.clear();
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject interiorObject = jsonArray.getJSONObject(i);
+                                String idInterior = interiorObject.getString("id_interior");
+                                String name = interiorObject.getString("nama_interior");
+                                String price = interiorObject.getString("harga_interior");
+                                String imageString = interiorObject.getString("gambar_interior");
+                                String ket_interior = interiorObject.getString("ket_interior");
+                                // Decode the image string into a Bitmap
+                                byte[] decodedBytes = Base64.decode(imageString, Base64.DEFAULT);
+                                Bitmap imageBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+
+                                // Create an Interior object and add it to the list
+                                Interior interior = new Interior(imageBitmap, idInterior, name, price, ket_interior);
+                                interiorList.add(interior);
+                            }
+
+                            // Notify the adapter that the data has changed
+                            interiorAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        VolleyConnection.getInstance(requireContext()).addToRequestQueue(jsonObjectRequest);
+    }
 }

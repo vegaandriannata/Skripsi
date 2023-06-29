@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText username, email, passsword, confPassword;
+    EditText username, email, password, confPassword, phoneNumber;
     Button login, register;
     ProgressDialog progressDialog;
 
@@ -37,12 +37,13 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        username = (EditText) findViewById(R.id.edt_usernameRegister);
-        email = (EditText) findViewById(R.id.edt_emailRegister);
-        passsword = (EditText) findViewById(R.id.edt_passwordRegister);
-        confPassword = (EditText) findViewById(R.id.edt_confPasswordRegister);
-        login = (Button) findViewById(R.id.btn_loginRegister);
-        register = (Button) findViewById(R.id.btn_registerRegister);
+        username = findViewById(R.id.edt_usernameRegister);
+        email = findViewById(R.id.edt_emailRegister);
+        password = findViewById(R.id.edt_passwordRegister);
+        confPassword = findViewById(R.id.edt_confPasswordRegister);
+        phoneNumber = findViewById(R.id.edt_phoneNumberRegister);
+        login = findViewById(R.id.btn_loginRegister);
+        register = findViewById(R.id.btn_registerRegister);
         progressDialog = new ProgressDialog(RegisterActivity.this);
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -58,21 +59,22 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String sUsername = username.getText().toString();
                 String sEmail = email.getText().toString();
-                String sPassword = passsword.getText().toString();
+                String sPassword = password.getText().toString();
                 String sConfPassword = confPassword.getText().toString();
+                String sPhoneNumber = phoneNumber.getText().toString();
 
                 if (sPassword.equals(sConfPassword) && !sPassword.equals("")) {
-                    CreateDataToServer(sUsername, sEmail, sPassword);
+                    CreateDataToServer(sUsername, sEmail, sPassword, sPhoneNumber);
                     Intent loginIntent = new Intent(RegisterActivity.this, Login.class);
                     startActivity(loginIntent);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Gagal! Pasword tidak cocok!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Gagal! Password tidak cocok!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    public void CreateDataToServer(final String username, final String email, final String password) {
+    public void CreateDataToServer(final String username, final String email, final String password, final String phoneNumber) {
         if (checkNetworkConnection()) {
             progressDialog.show();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_REGISTER_URL,
@@ -103,6 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
                     params.put("username", username);
                     params.put("email", email);
                     params.put("password", password);
+                    params.put("nohp", phoneNumber);
                     return params;
                 }
             };

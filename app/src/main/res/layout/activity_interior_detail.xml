@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Interior image -->
+        <ImageView
+            android:id="@+id/interior_image"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sample_interior" />
+
+        <!-- Interior name -->
+        <TextView
+            android:id="@+id/interior_name"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:text="Interior Name" />
+
+        <!-- Interior price -->
+        <TextView
+            android:id="@+id/interior_price"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:text="Interior Price" />
+
+        <!-- Interior description -->
+        <TextView
+            android:id="@+id/interior_ket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:text="Interior Description" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/interior_buy_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Beli" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

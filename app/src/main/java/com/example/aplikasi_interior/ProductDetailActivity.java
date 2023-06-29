@@ -11,7 +11,29 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.view.View;
+import android.content.Intent;
+import java.io.Serializable;
+import java.util.List;
+import java.util.ArrayList;
+import java.text.DecimalFormat;
+import com.example.aplikasi_interior.DbContract;
+import com.example.aplikasi_interior.VolleyConnection;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.AuthFailureError;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.widget.Button;
+import android.widget.Toast;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,17 +48,8 @@ import android.widget.TextView;
 import android.view.View;
 import android.content.Intent;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.view.View;
-import android.content.Intent;
+import com.example.aplikasi_interior.DbContract;
+import com.example.aplikasi_interior.VolleyConnection;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
@@ -96,6 +109,15 @@ public class ProductDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Ikon keranjang click listener
+        ImageView cartButton = findViewById(R.id.add_to_cart_button);
+        cartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addToCart();
+            }
+        });
     }
 
     public void decreaseQuantity(View view) {
@@ -111,5 +133,54 @@ public class ProductDetailActivity extends AppCompatActivity {
             tvQuantity.setText(String.valueOf(quantity));
         }
     }
-}
 
+    private void addToCart() {
+        // Mendapatkan ID barang dan user ID
+        int idBrg = product.getIdBrg();
+        SessionManager sessionManager = new SessionManager(ProductDetailActivity.this);
+        String userId = sessionManager.getUserId();
+        String qty = String.valueOf(quantity);
+
+        // Membuat permintaan POST menggunakan StringRequest
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_POST_CART,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String status = jsonObject.getJSONArray("server_response")
+                                    .getJSONObject(0)
+                                    .getString("status");
+
+                            if (status.equals("OK")) {
+                                Toast.makeText(ProductDetailActivity.this, "Product added to cart", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ProductDetailActivity.this, "Failed to add product to cart", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ProductDetailActivity.this, "Failed to add product to cart", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ProductDetailActivity.this, "Failed to add product to cart", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                // Menyiapkan parameter yang akan dikirim dalam permintaan
+                Map<String, String> params = new HashMap<>();
+                params.put("id_brg", String.valueOf(idBrg));
+                params.put("user_id", userId);
+                params.put("qty", qty);
+                return params;
+            }
+        };
+
+        // Menambahkan permintaan ke RequestQueue menggunakan VolleyConnection
+        VolleyConnection.getInstance(ProductDetailActivity.this).addToRequestQueue(stringRequest);
+    }
+}

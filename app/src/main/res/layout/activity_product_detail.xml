@@ -93,25 +93,16 @@
                 android:layout_height="wrap_content"
                 android:text="Beli" />
 
-            <ImageView
-                android:id="@+id/add_to_wishlist"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_wishlist"
-                android:layout_marginStart="200dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="Wishlist" />
 
             <ImageView
                 android:id="@+id/add_to_cart_button"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_add_to_cart"
-                android:layout_marginStart="8dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="250dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="120dp"
-                android:contentDescription="Add to Cart" />
+                android:contentDescription="Add to Cart"
+                android:src="@drawable/ic_add_to_cart" />
 
         </LinearLayout>
 
