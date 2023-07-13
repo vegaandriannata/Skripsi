@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ public class KonfirmasiPesananInterior extends AppCompatActivity {
     private TextView alamatTextView;
     private TextView catatanTextView;
     private TextView hargaTextView;
-
+    private ImageView backIcon;
     private Button confirmButton;
     private ProgressDialog progressDialog;
 
@@ -42,7 +43,13 @@ public class KonfirmasiPesananInterior extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_konfirmasi_pesanan_interior);
-
+        backIcon = findViewById(R.id.back_icon);
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Mengakhiri activity saat ini dan kembali ke activity sebelumnya
+            }
+        });
         idInteriorTextView = findViewById(R.id.id_interior);
         userIdTextView = findViewById(R.id.user_id);
         orderDateTextView = findViewById(R.id.order_date);
@@ -50,6 +57,10 @@ public class KonfirmasiPesananInterior extends AppCompatActivity {
         alamatTextView = findViewById(R.id.alamat);
         catatanTextView = findViewById(R.id.catatan);
         hargaTextView = findViewById(R.id.harga);
+
+        //menghilangkan tampilan id_brg dan user_id
+        idInteriorTextView.setVisibility(View.GONE);
+        userIdTextView.setVisibility(View.GONE);
 
         confirmButton = findViewById(R.id.confirm_button);
         progressDialog = new ProgressDialog(this);
@@ -74,7 +85,7 @@ public class KonfirmasiPesananInterior extends AppCompatActivity {
                 String orderDate = dateFormat.format(calendar.getTime());
                 orderDateTextView.setText("Order Date: " + orderDate);
 
-                totalOrderTextView.setText("Total Order: " + totalOrder.replace("Rp", "").replace(",", ""));
+                totalOrderTextView.setText("Total Order: " + totalOrder);
                 alamatTextView.setText("Alamat: " + address);
                 catatanTextView.setText("Catatan: " + catatan);
                 hargaTextView.setText("Harga: " + interior.getPrice());

@@ -69,7 +69,9 @@
         public int getItemCount() {
             return productList.size();
         }
-
+        public void setProductList(List<Product> productList) {
+            this.productList = productList;
+        }
         public class ProductViewHolder extends RecyclerView.ViewHolder {
             private ImageView productImage;
             private TextView productName;

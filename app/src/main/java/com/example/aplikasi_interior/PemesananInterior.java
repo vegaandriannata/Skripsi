@@ -71,13 +71,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PemesananInterior extends AppCompatActivity {
-
+    private ImageView backIcon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pemesanan_interior);
 
         final List<Interior> selectedInteriors = new ArrayList<>();
+
+        backIcon = findViewById(R.id.back_icon);
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Mengakhiri activity saat ini dan kembali ke activity sebelumnya
+            }
+        });
 
         // Retrieve the selected interiors from the intent
         Bundle extras = getIntent().getExtras();

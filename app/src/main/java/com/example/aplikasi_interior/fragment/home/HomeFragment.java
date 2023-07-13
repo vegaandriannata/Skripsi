@@ -1,9 +1,12 @@
-package com.example.aplikasi_interior.ui.home;
+package com.example.aplikasi_interior.fragment.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +37,8 @@ import android.util.Base64;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
 import android.widget.TextView;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -89,6 +94,30 @@ public class HomeFragment extends Fragment {
                 isInteriorMenuClicked = true;
                 recyclerView.setAdapter(interiorAdapter);
                 fetchInteriorDataFromDatabase();
+            }
+        });
+
+        // Set up the search functionality
+        EditText searchEditText = view.findViewById(R.id.search_edittext);
+        ImageButton searchButton = view.findViewById(R.id.search_button);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String itemName = searchEditText.getText().toString().trim();
+                searchItemByName(itemName);
+            }
+        });
+
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String itemName = searchEditText.getText().toString().trim();
+                    searchItemByName(itemName);
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -180,5 +209,27 @@ public class HomeFragment extends Fragment {
                 });
 
         VolleyConnection.getInstance(requireContext()).addToRequestQueue(jsonObjectRequest);
+    }
+
+    private void searchItemByName(String itemName) {
+        if (isInteriorMenuClicked) {
+            List<Interior> filteredInteriors = new ArrayList<>();
+            for (Interior interior : interiorList) {
+                if (interior.getName().toLowerCase().contains(itemName.toLowerCase())) {
+                    filteredInteriors.add(interior);
+                }
+            }
+            interiorAdapter.setInteriorList(filteredInteriors);
+            interiorAdapter.notifyDataSetChanged();
+        } else {
+            List<Product> filteredProducts = new ArrayList<>();
+            for (Product product : productList) {
+                if (product.getName().toLowerCase().contains(itemName.toLowerCase())) {
+                    filteredProducts.add(product);
+                }
+            }
+            productAdapter.setProductList(filteredProducts);
+            productAdapter.notifyDataSetChanged();
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.aplikasi_interior.ui.account;
+package com.example.aplikasi_interior.fragment.account;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +23,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import android.widget.LinearLayout;
 
 import com.example.aplikasi_interior.SessionManager;
 import com.example.aplikasi_interior.R;
@@ -60,6 +62,7 @@ public class AccountFragment extends Fragment {
                 logout();
             }
         });
+
     }
 
     private void fetchUserData(final String username) {
@@ -73,8 +76,8 @@ public class AccountFragment extends Fragment {
                             String email = jsonObject.getString("email");
 
                             userIdTextView.setText(userId);
-                            usernameTextView.setText(username);
-                            emailTextView.setText(email);
+                            usernameTextView.setText("Username: "+username);
+                            emailTextView.setText("Email: "+email);
 
                             sessionManager.setUserId(userId);
                         } catch (JSONException e) {

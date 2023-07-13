@@ -1,4 +1,4 @@
-package com.example.aplikasi_interior.ui.notifications;
+package com.example.aplikasi_interior.fragment.notifications;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

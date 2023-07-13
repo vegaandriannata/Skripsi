@@ -7,9 +7,6 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.aplikasi_interior.ui.home.HomeFragment;
-import com.example.aplikasi_interior.ui.home.HomeViewModel;
-
 public class PesananBerhasilActivity extends AppCompatActivity {
 
     @Override

@@ -66,6 +66,9 @@ public class Product implements Serializable {
     public int getStok() {
         return stok;
     }
+    public void setStok(int stok) {
+        this.stok = stok;
+    }
 
     public int getQuantity() {
         return quantity;

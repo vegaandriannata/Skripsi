@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorGrey"
     android:orientation="vertical"
     tools:context=".Login">
 
@@ -80,8 +80,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@drawable/custom1"
-            android:backgroundTint="#FBFCFD"
+            android:background="@drawable/bg_btn1"
+
             android:text="Register" />
     </LinearLayout>
 </LinearLayout>

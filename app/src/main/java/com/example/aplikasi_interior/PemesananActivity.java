@@ -4,41 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 
 import java.util.ArrayList;
 import java.util.List;
-
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
-
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.text.DecimalFormat;
 
 public class PemesananActivity extends AppCompatActivity {
@@ -48,6 +24,7 @@ public class PemesananActivity extends AppCompatActivity {
     private TextView totalOrderTextView;
     private EditText addressInput;
     private Button checkoutButton;
+    private ImageView backIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +38,8 @@ public class PemesananActivity extends AppCompatActivity {
         if (extras != null) {
             selectedProducts = (List<Product>) extras.getSerializable("selectedProducts");
         }
+
+
 
         selectedProductsRecyclerView = findViewById(R.id.selected_products_recycler_view);
         selectedProductAdapter = new SelectedProductAdapter(selectedProducts);
@@ -89,6 +68,13 @@ public class PemesananActivity extends AppCompatActivity {
                 intent.putExtra("totalOrder", formattedTotal);
 
                 startActivity(intent);
+            }
+        });
+        backIcon = findViewById(R.id.back_icon);
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Mengakhiri activity saat ini dan kembali ke activity sebelumnya
             }
         });
     }

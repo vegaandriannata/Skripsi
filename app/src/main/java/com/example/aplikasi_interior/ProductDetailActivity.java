@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.util.Base64;
 import java.text.DecimalFormat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -64,16 +64,19 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView tvQuantity;
     private int quantity = 1;
     private Product product;
+    private ImageView backIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
 
+
         // Inisialisasi list produk yang dipilih
         selectedProducts = new ArrayList<>();
 
         // Retrieve the product object passed from the adapter
+
         product = (Product) getIntent().getSerializableExtra("product");
 
         productImage = findViewById(R.id.product_image);
@@ -92,9 +95,16 @@ public class ProductDetailActivity extends AppCompatActivity {
             productName.setText(product.getName());
             productPrice.setText(product.getPrice());
             productKet.setText(product.getKetBrg());
+
             productStock.setText("Stok: " + String.valueOf(product.getStok()));
         }
-
+        backIcon = findViewById(R.id.back_icon);
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Mengakhiri activity saat ini dan kembali ke activity sebelumnya
+            }
+        });
         // Button Beli click listener
         Button buyButton = findViewById(R.id.buy_button);
         buyButton.setOnClickListener(new View.OnClickListener() {
@@ -135,11 +145,13 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void addToCart() {
-        // Mendapatkan ID barang dan user ID
+        // Mendapatkan ID barang, user ID, gambar, nama_brg, dan harga_brg
         int idBrg = product.getIdBrg();
         SessionManager sessionManager = new SessionManager(ProductDetailActivity.this);
         String userId = sessionManager.getUserId();
         String qty = String.valueOf(quantity);
+        String namaBrg = product.getName(); // Mengganti "product.getName()" dengan variabel namaBrg yang sesuai dari data produk
+        String hargaBrg = product.getPrice(); // Mengganti "product.getPrice()" dengan variabel hargaBrg yang sesuai dari data produk
 
         // Membuat permintaan POST menggunakan StringRequest
         StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_POST_CART,
@@ -153,20 +165,20 @@ public class ProductDetailActivity extends AppCompatActivity {
                                     .getString("status");
 
                             if (status.equals("OK")) {
-                                Toast.makeText(ProductDetailActivity.this, "Product added to cart", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProductDetailActivity.this, "Furnitur berhasil ditambahkan ke keranjang", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(ProductDetailActivity.this, "Failed to add product to cart", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProductDetailActivity.this, "Gagal menambahkan furnitur ke keranjang", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ProductDetailActivity.this, "Failed to add product to cart", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProductDetailActivity.this, "Gagal menambahkan furnitur ke keranjang", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ProductDetailActivity.this, "Failed to add product to cart", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetailActivity.this, "Gagal menambahkan furnitur ke keranjang", Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override
@@ -176,6 +188,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                 params.put("id_brg", String.valueOf(idBrg));
                 params.put("user_id", userId);
                 params.put("qty", qty);
+                params.put("nama_brg", namaBrg);
+                params.put("harga_brg", hargaBrg.replace("Rp", "").replace(",", ""));
                 return params;
             }
         };

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,15 +35,22 @@ public class KonfirmasiPesananActivity extends AppCompatActivity {
     private TextView alamatTextView;
     private TextView qtyTextView;
     private TextView hargaTextView;
-
+    private ImageView backIcon;
     private Button confirmButton;
     private ProgressDialog progressDialog;
+    private ArrayList<Product> selectedProducts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_konfirmasi_pesanan);
-
+        backIcon = findViewById(R.id.back_icon);
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Mengakhiri activity saat ini dan kembali ke activity sebelumnya
+            }
+        });
         idBarangTextView = findViewById(R.id.id_barang);
         userIdTextView = findViewById(R.id.user_id);
         orderDateTextView = findViewById(R.id.order_date);
@@ -61,27 +69,27 @@ public class KonfirmasiPesananActivity extends AppCompatActivity {
         // Retrieve the selected products and address from the intent
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            ArrayList<Product> selectedProducts = (ArrayList<Product>) extras.getSerializable("selectedProducts");
+            selectedProducts = (ArrayList<Product>) extras.getSerializable("selectedProducts");
             String address = extras.getString("address");
-            String totalOrder = extras.getString("totalOrder"); // Mengambil total order dari PemesananActivity
+            String totalOrder = extras.getString("totalOrder");
 
             // Set the values to the respective TextViews
             if (selectedProducts != null && !selectedProducts.isEmpty()) {
                 Product product = selectedProducts.get(0);
                 idBarangTextView.setText("ID Barang: " + product.getIdBrg());
 
-                // Mengambil User ID dari SessionManager
+                // Get the User ID from the SessionManager
                 SessionManager sessionManager = new SessionManager(this);
                 String userId = sessionManager.getUserId();
                 userIdTextView.setText("User ID: " + userId);
 
-                // Mendapatkan tanggal hari pemesanan secara otomatis
+                // Get the current order date automatically
                 Calendar calendar = Calendar.getInstance();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String orderDate = dateFormat.format(calendar.getTime());
                 orderDateTextView.setText("Order Date: " + orderDate);
 
-                totalOrderTextView.setText("Total Order: " + totalOrder.replace("Rp", "").replace(",", "")); // Menggunakan total order yang diambil dari PemesananActivity
+                totalOrderTextView.setText("Total Order: " + totalOrder);
                 alamatTextView.setText("Alamat: " + address);
                 qtyTextView.setText("Quantity: " + product.getQuantity());
                 hargaTextView.setText("Harga: " + product.getPrice());
@@ -113,6 +121,14 @@ public class KonfirmasiPesananActivity extends AppCompatActivity {
 
                             if (status.equals("OK")) {
                                 Toast.makeText(getApplicationContext(), "Order saved successfully", Toast.LENGTH_SHORT).show();
+                                // Reduce stock in the selected product
+                                Product product = selectedProducts.get(0);
+                                int newStock = product.getStok() - product.getQuantity();
+                                product.setStok(newStock);
+
+                                // Update stock in the database
+                                updateStockOnServer(product);
+
                                 // Redirect to success page or perform any desired action
                                 Intent intent = new Intent(KonfirmasiPesananActivity.this, PesananBerhasilActivity.class);
                                 startActivity(intent);
@@ -150,6 +166,31 @@ public class KonfirmasiPesananActivity extends AppCompatActivity {
         };
 
         // Add the request to the RequestQueue
+        VolleyConnection.getInstance(this).addToRequestQueue(stringRequest);
+    }
+    private void updateStockOnServer(Product product) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_POST_ORDER,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle the response from the server if needed
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle the error response from the server if needed
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_brg", String.valueOf(product.getIdBrg()));
+                params.put("stok", String.valueOf(product.getStok()));
+                return params;
+            }
+        };
+
         VolleyConnection.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

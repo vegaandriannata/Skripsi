@@ -25,6 +25,7 @@ public class InteriorDetailActivity extends AppCompatActivity {
     private Button buyButton;
     private List<Interior> selectedInteriors;
     private Interior interior;
+    private ImageView backIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,13 @@ public class InteriorDetailActivity extends AppCompatActivity {
             interiorKet.setText(interior.getKetInterior());
         }
 
+        backIcon = findViewById(R.id.back_icon);
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Mengakhiri activity saat ini dan kembali ke activity sebelumnya
+            }
+        });
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

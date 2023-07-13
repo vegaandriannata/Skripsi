@@ -71,7 +71,9 @@ public class InteriorAdapter extends RecyclerView.Adapter<InteriorAdapter.Interi
     public int getItemCount() {
         return interiorList.size();
     }
-
+    public void setInteriorList(List<Interior> interiorList) {
+        this.interiorList = interiorList;
+    }
     public class InteriorViewHolder extends RecyclerView.ViewHolder {
         private ImageView interiorImage;
         private TextView interiorName;
