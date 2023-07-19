@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.widget.LinearLayout;
-
+import com.example.aplikasi_interior.InformasiActivity;
 import com.example.aplikasi_interior.SessionManager;
 import com.example.aplikasi_interior.R;
 import com.example.aplikasi_interior.VolleyConnection;
@@ -45,7 +45,7 @@ public class AccountFragment extends Fragment {
         usernameTextView = view.findViewById(R.id.text_username);
         emailTextView = view.findViewById(R.id.text_email);
         sessionManager = new SessionManager(requireContext());
-        userIdTextView.setVisibility(View.GONE);
+
         return view;
     }
 
@@ -62,7 +62,14 @@ public class AccountFragment extends Fragment {
                 logout();
             }
         });
-
+        LinearLayout informasiLayout = view.findViewById(R.id.informasi);
+        informasiLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent informasiIntent = new Intent(requireContext(), InformasiActivity.class);
+                startActivity(informasiIntent);
+            }
+        });
     }
 
     private void fetchUserData(final String username) {
@@ -75,9 +82,9 @@ public class AccountFragment extends Fragment {
                             String userId = jsonObject.getString("user_id");
                             String email = jsonObject.getString("email");
 
-                            userIdTextView.setText(userId);
-                            usernameTextView.setText("Username: "+username);
-                            emailTextView.setText("Email: "+email);
+                            userIdTextView.setText("ID: "+userId);
+                            usernameTextView.setText(username);
+                            emailTextView.setText(email);
 
                             sessionManager.setUserId(userId);
                         } catch (JSONException e) {

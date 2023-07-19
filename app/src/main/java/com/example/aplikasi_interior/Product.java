@@ -39,7 +39,7 @@ public class Product implements Serializable {
     public void setImage(Bitmap image) {
         this.image = image;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         imageBytes = byteArrayOutputStream.toByteArray();
     }
 

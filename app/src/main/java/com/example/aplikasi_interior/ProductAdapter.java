@@ -52,7 +52,7 @@
 
                     // Convert the image Bitmap to byte array
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    product.getImage().compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    product.getImage().compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     byte[] byteArray = stream.toByteArray();
 
                     // Set the byte array to the Product object

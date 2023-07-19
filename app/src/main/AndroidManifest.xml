@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.aplikasi_interior" >
+    package="com.example.aplikasi_interior">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,10 +14,42 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true" >
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".PengantaranActivity"
+            android:exported="false"
+            android:theme="@style/AppBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".TokoActivity"
+            android:exported="false"
+            android:theme="@style/AppBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".FAQActivity"
+            android:exported="false"
+            android:theme="@style/AppBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".InformasiActivity"
+            android:exported="false"
+            android:theme="@style/AppBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".KonfirmasiKeranjang"
-            android:exported="false" >
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -25,7 +57,7 @@
         <activity
             android:name=".KeranjangPemesananActivity"
             android:exported="false"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -33,7 +65,7 @@
         <activity
             android:name=".DetailPemesananInteriorActivity"
             android:exported="false"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -41,7 +73,7 @@
         <activity
             android:name=".DetailPemesananActivity"
             android:exported="false"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -49,7 +81,7 @@
         <activity
             android:name=".KonfirmasiPesananInterior"
             android:exported="false"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -57,7 +89,7 @@
         <activity
             android:name=".PemesananInterior"
             android:exported="false"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -65,7 +97,7 @@
         <activity
             android:name=".InteriorDetailActivity"
             android:exported="false"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -73,7 +105,7 @@
         <activity
             android:name=".KonfirmasiPesananActivity"
             android:exported="true"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -81,7 +113,7 @@
         <activity
             android:name=".PesananBerhasilActivity"
             android:exported="true"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -89,7 +121,7 @@
         <activity
             android:name=".RegisterActivity"
             android:exported="true"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -97,7 +129,7 @@
         <activity
             android:name=".ProductDetailActivity"
             android:exported="true"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -105,14 +137,14 @@
         <activity
             android:name=".PemesananActivity"
             android:exported="true"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false" >
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -123,7 +155,7 @@
         <activity
             android:name=".Login"
             android:exported="true"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -131,7 +163,7 @@
         <activity
             android:name=".WelcomeActivity"
             android:exported="true"
-            android:theme="@style/AppBar" >
+            android:theme="@style/AppBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

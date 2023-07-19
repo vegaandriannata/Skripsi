@@ -8,41 +8,86 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp">
-    <TextView
-        android:id="@+id/text_user_id"
-        android:textColor="@color/colorBlack"
-        android:text="USER ID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    <TextView
-        android:id="@+id/text_username"
-        android:text="Username"
-        android:textColor="@color/colorBlack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/text_email"
-        android:textColor="@color/colorBlack"
-        android:text="Email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/colorBlack"
+            android:text="Account"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/text_user_id"
+            android:textColor="@color/colorBlack"
+            android:text="USER ID"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="20dp"
+    android:layout_marginLeft="50dp"
+    android:textColor="@color/colorBlack"
+    android:text="Username"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_btn2">
 
+        <TextView
+            android:id="@+id/text_username"
+            android:text="Username"
+            android:textColor="@color/colorWhite"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:textColor="@color/colorBlack"
+        android:layout_marginLeft="50dp"
+        android:text="Email"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/bg_btn2">
+
+        <TextView
+            android:id="@+id/text_email"
+            android:text="Email"
+            android:textColor="@color/colorWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+    </LinearLayout>
     <!-- pesanan detail -->
     <LinearLayout
-        android:id="@+id/pesanan"
+        android:id="@+id/informasi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="15dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp">
@@ -63,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorBlack"
-                android:text="Pesanan"
+                android:text="Informasi"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
@@ -71,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorBlack"
-                android:text="Tinjau pesanan anda"
+                android:text="FAQ, toko, pengantaran, hubung..."
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
 
@@ -81,51 +126,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_forward" />
     </LinearLayout>
-    <!-- caht detail -->
-    <LinearLayout
-        android:id="@+id/chat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp">
 
-        <ImageView
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_chat" />
-
-        <LinearLayout
-            android:layout_width="291dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorBlack"
-                android:text="Chat"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorBlack"
-                android:text="Lihat pesan yang belum terbaca"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_forward" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
